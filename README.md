@@ -60,6 +60,28 @@ Use #pragma marks to categorize methods into functional groupings and protocol i
 - (NSString *)description {}
 ```
 
+## Documentation
+
+Use the following documentation style for methods and properties:
+
+```objc
+
+/*
+ * A concise description of the method
+ * with a focus on what it does, rather than
+ * how it works.
+ *
+ * @param someString A string that contains numbers
+ * @return strings that were delimited by numbers
+ */
+- (NSArray *)componentsSeparatedByNumbers:(NSString *someString);
+
+/// Employee name
+@property (nonatomic) NSString *name;
+```
+
+Both of these will show up when `alt`-clicking a method or property usage.
+
 ## Spacing
 
 * Indent using 4 spaces. Never indent with tabs. Be sure to set this preference in Xcode.
