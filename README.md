@@ -167,6 +167,12 @@ In method signatures, there should be a space after the scope (-/+ symbol). Ther
 ```objc
 - (void)setExampleText:(NSString *)text image:(UIImage *)image;
 ```
+
+In method implementations, the first curly brace should be positioned on the same line as the method signature. This creates a compact `.m` file when viewed with method bodies collapsed.
+```objc
+- (void)setExampleText:(NSString *)text image:(UIImage *)image { ... }
+```
+
 ## Variables
 
 Variables should be named as descriptively as possible. Single letter variable names should be avoided except in `for()` loops.
