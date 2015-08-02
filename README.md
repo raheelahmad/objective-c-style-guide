@@ -27,38 +27,7 @@ UIApplication.sharedApplication.delegate;
 
 ## Organization
 
-Use #pragma marks to categorize methods into functional groupings and protocol implementations, following this general structure:
-
-```objc
-#pragma mark Properties
-
-@dynamic someProperty;
-
-- (void)setCustomProperty:(id)value {}
-
-#pragma mark Lifecycle
-
-+ (id)objectWithThing:(id)thing {}
-- (id)init {}
-
-#pragma mark Drawing
-
-- (void)drawRect:(CGRect) {}
-
-#pragma mark Another functional grouping
-
-#pragma mark GHSuperclass
-
-- (void)someOverriddenMethod {}
-
-#pragma mark NSCopying
-
-- (id)copyWithZone:(NSZone *)zone {}
-
-#pragma mark NSObject
-
-- (NSString *)description {}
-```
+Use `#pragma marks` to categorize methods into functional groupings and protocol implementations. But too many of these implies you should break down your class.
 
 ## Documentation
 
@@ -67,6 +36,7 @@ Use the following documentation style for methods and properties:
 ```objc
 
 /*
+ * For multi-line comments
  * A concise description of the method
  * with a focus on what it does, rather than
  * how it works.
@@ -91,14 +61,13 @@ Both of these will show up when `alt`-clicking a method or property usage.
 ```objc
 if (user.isHappy) {
 //Do something
-}
-else {
+} else {
 //Do something else
 }
 ```
 * One blank line between methods 
 * Whitespace within methods should separate functionality, but often there should probably be new methods.
-	* Maximum one blank line separation
+	* Maximum two blank lines separation
 * `@synthesize` and `@dynamic` should each be declared on new lines in the implementation.
 
 ## Conditionals
@@ -123,6 +92,40 @@ or
 ```objc
 if (!error) return success;
 ```
+
+Avoid returning early. Instead of:
+
+```objc
+- (NSString *)mappedString:(NSString *)input {
+  if ([input isEqual:@"One"]) {
+    return @"1";
+  } else if ([input isEqual:@"Two"]) {
+    return @"2";
+  } else if ([input isEqual:@"Mars"]) {
+    NSLog(@"WHAT?");
+  }
+  
+  return @"-1";
+}
+```
+
+do this for the sake of clarity & avoiding bugs:
+
+```objc
+- (NSString *)mappedString:(NSString *)input {
+  NSString *result = @"-1";
+  if ([input isEqual:@"One"]) {
+    result = @"1";
+  } else if ([input isEqual:@"Two"]) {
+    result = @"2";
+  } else if ([input isEqual:@"Mars"]) {
+    NSLog(@"WHAT?");
+  }
+  
+  return result;
+}
+```
+
 
 ### Ternary Operator
 
@@ -237,8 +240,6 @@ When using properties, instance variables should always be accessed and mutated 
 ## Comments
 
 When they are needed, comments should be used to explain **why** a particular piece of code does something.
-
-Block comments should generally be avoided, as code should be as self-documenting as possible.
 
 ## init
 
@@ -400,7 +401,10 @@ If the name of a `BOOL` property is expressed as an adjective, the property can 
 
 ## Singletons
 
+Don't write them. In case someone holds a gun to your head:
+
 Singleton objects should use a thread-safe pattern for creating their shared instance.
+
 ```objc
 + (instancetype)sharedInstance {
    static id sharedInstance = nil;
@@ -413,22 +417,9 @@ Singleton objects should use a thread-safe pattern for creating their shared ins
    return sharedInstance;
 }
 ```
+
 This will prevent [possible and sometimes prolific crashes](http://cocoasamurai.blogspot.com/2011/04/singletons-your-doing-them-wrong.html).
 
 ## Xcode project
 
-The physical files should be kept in sync with the Xcode project files in order to avoid file sprawl. Any Xcode groups created should be reflected by folders in the filesystem. Code should be grouped not only by type, but also by feature for greater clarity.
-
 When possible, always turn on "Treat Warnings as Errors" in the target's Build Settings and enable as many [additional warnings](http://boredzo.org/blog/archives/2009-11-07/warnings) as possible. If you need to ignore a specific warning, use [Clang's pragma feature](http://clang.llvm.org/docs/UsersManual.html#controlling-diagnostics-via-pragmas).
-
-# Other Objective-C Style Guides
-
-If ours doesn't fit your tastes, have a look at some other style guides:
-
-* [Google](http://google-styleguide.googlecode.com/svn/trunk/objcguide.xml)
-* [GitHub](https://github.com/github/objective-c-conventions)
-* [Adium](https://trac.adium.im/wiki/CodingStyle)
-* [Sam Soffes](https://gist.github.com/soffes/812796)
-* [CocoaDevCentral](http://cocoadevcentral.com/articles/000082.php)
-* [Luke Redpath](http://lukeredpath.co.uk/blog/my-objective-c-style-guide.html)
-* [Marcus Zarra](http://www.cimgf.com/zds-code-style-guide/)
